@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 配置项 -->
+    <settings>
+        <!-- 启用下划线转换成驼峰式命名 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+
+        <!-- 是否开启延迟加载，懒加载。默认未启用 -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+
+        <!-- 启用二级缓存，总开关 -->
+        <setting name="cacheEnabled" value="true"/>
+
+        <!-- 输出查询语句及相关日志，logImpl属性用于指定MyBatis所用日志的具体实现，未指定时将自动检测。
+        检测顺序依次为：SLF4J | LOG4J | LOG4J2 | JDK_LOGGING | COMMONS_LOGGING | STDOUT_LOGGING | NO_LOGGING。
+        STDOUT_LOGGING表示输出到控制台，在整合了springmvc时，推荐选择COMMONS_LOGGING，表示使用spring-jcl进行日志记录，
+        spring对此部分进行了重写，但包名依旧沿用org.apache.commons.logging，可自动匹配日志实现，包括slf4j。 -->
+        <setting name="logImpl" value="COMMONS_LOGGING"/>
+
+        <!-- logPrefix属性用于指定MyBatis增加到日志名称的前缀，配置此属性，是方便于其它日志记录插件使用。
+        value值应以点结尾，以与真正的日志名称分隔。若不指定此属性，则默认日志名称的前缀应为dao接口所在包。
+        如：dao接口为com.situ.dao.CategoryDAO，则日志名称为：com.situ.dao.CategoryDAO，若指定了以下前缀，
+        则日志名称变为mybatis.dao.com.situ.dao.CategoryDAO，此时日志插件再使用com.situ.dao作为判定输出的前缀，已经无效。
+        如果项目中的dao接口分散在不同的包里，则此属性就可派上用场，添加此配置后，即所有日志名称均以此配置值为前缀，
+        那么日志实现就可指定此虚拟的包名mybatis.dao了。注意：一旦指定使用此配置指定前缀，则日志记录插件使用默认的原始包名做前缀将失败 -->
+        <setting name="logPrefix" value="mybatis."/>
+    </settings>
+
+
+    <!-- 配置别名 -->
+    <typeAliases>
+        <package name="com.situ.demo1.model"/>
+    </typeAliases>
+</configuration>

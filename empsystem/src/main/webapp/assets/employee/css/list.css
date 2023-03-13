@@ -1,0 +1,150 @@
+@charset "utf-8";
+
+.fr {
+    float: right;
+}
+
+.fl {
+    float: left;
+}
+
+.clear::after {
+    content: "";
+    display: block;
+    clear: both;
+    width: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+
+.action > div {
+    float: left;
+}
+
+.display {
+    overflow-y: scroll;
+}
+
+.display > #tbl {
+    border-collapse: collapse;
+}
+
+.display > #tbl tr > td,
+.display > #tbl tr > th {
+    border: 1px solid #ccc;
+    padding: 15px 20px;
+}
+
+.display > #tbl tr:nth-child(even) {
+    background-color: navajowhite;
+}
+
+.display > #tbl > tbody > tr:hover {
+    background-color:  rgba(0, 0, 0, 0.5);
+}
+
+.paginate {
+    margin-top: 8px;
+    margin-left: 20px;
+}
+
+.paginate > ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.paginate > ul > li {
+    float: left;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.paginate > ul > li:hover {
+    background-color:  rgba(0, 0, 0, 0.5);
+}
+
+.paginate > ul > li:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.paginate > ul > li:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.paginate > ul > li > a {
+    text-decoration: none;
+    font-size: 13px;
+    display: inline-block;
+    padding: 5px 10px;
+    color: navajowhite;
+    user-select: none;
+}
+
+.paginate > ul > li.active {
+    background-color: navajowhite;
+}
+.paginate >select{
+    float: left;
+}
+
+.action {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.action button {
+    padding: 10px 30px;
+    margin-right: 30px;
+    outline: none;
+    border: none;
+    color: navajowhite;
+    background-color:  rgba(0, 0, 0, 0.8);
+    font-size: 15px;
+    cursor: pointer;
+}
+.action button:hover{
+    background-color:  rgba(0, 0, 0, 0.5);
+}
+#del-btn {
+    background-color: indianred;
+}
+#del-btn:hover{
+    background-color:  rgba(0, 0, 0, 0.5);
+}
+.search > form > div {
+    float: left;
+}
+
+.search input, .search select {
+    outline: none;
+    height: 35px;
+    width: 200px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    padding-left: 10px;
+    margin-right: 10px;
+}
+
+#page-size {
+    width: 50px;
+    height: 20px;
+    color: black;
+    border: 1px solid #ccc;
+    outline: none;
+    margin-left: 20px;
+    text-align: center;
+}

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	  http://www.springframework.org/schema/beans/spring-beans.xsd
+	  http://www.springframework.org/schema/aop
+	  http://www.springframework.org/schema/aop/spring-aop.xsd
+	  http://www.springframework.org/schema/context
+	  http://www.springframework.org/schema/context/spring-context.xsd
+	  http://www.springframework.org/schema/tx
+	  http://www.springframework.org/schema/tx/spring-tx.xsd
+	  http://www.springframework.org/schema/cache
+      http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <!-- 1.配置自动扫描包，拥有指定注解的将会自动存入spring容器 -->
+    <context:component-scan base-package="com.situ.demo1.service.impl"/>
+
+    <!-- 2.自动加载配置文件中的配置项，可以配置多个 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!-- 3.配置数据库连接池，数据源 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <!-- 基本属性 url、user、password -->
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+        <!-- 配置最小、最大。注意：生产环境的参数可能会远远大于测试环境的参数。 -->
+        <property name="initialSize" value="10"/>
+        <property name="maxTotal" value="30"/>
+        <property name="maxIdle" value="10"/>
+        <property name="minIdle" value="5"/>
+
+        <!--配置获取连接等待超时的时间 -->
+        <property name="maxWaitMillis" value="2000"/>
+        <!--缓存预编译的PreparedStatement-->
+        <property name="poolPreparedStatements" value="true"/>
+        <!-- 配置缓存的PreparedStatement的数量 -->
+        <property name="maxOpenPreparedStatements" value="200"/>
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="300000"/>
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+
+        <!-- 将testOnBorrow和testOnReturn设置为true的话，会影响数据库操作性能 -->
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnCreate" value="false"/>
+    </bean>
+
+    <!--4.配置mybatis的步骤-->
+    <!-- 一、创建SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 指定数据库连接池 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 指定mybatis的配置文件 -->
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+        <!-- 指定每一个模型实体的映射文件 -->
+        <property name="mapperLocations" value="classpath:mapper/**/*.xml"/>
+        <!-- 配置插件 -->
+        <!--<property name="plugins">
+            <array>
+                &lt;!&ndash; 国内开发者开发的分页插件 https://pagehelper.github.io/ &ndash;&gt;
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            helperDialect=mysql
+                            reasonable=true
+                            rowBoundsWithCount=true
+                            pageSizeZero=true
+                            offsetAsPageNum=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>-->
+    </bean>
+
+    <!-- 二、mapper扫描器，将包下面的mapper接口自动创建代理对象，自动创建到Spring容器中，bean的id就是mapper的类名(首字母小写) -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.situ.demo1.dao"/>
+    </bean>
+
+    <!-- 三、创建SqlSession会话，不是单例的 -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+
+    <!-- 配置事务管理器。 -->
+    <!--<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>-->
+
+    <!-- 配置通知（切入代码）。事务拦截表达式，统一由xml文件配置，所以去掉了事务的注解支持配置 -->
+    <!--transaction-manager的默认值即为transactionManager，所以可省略-->
+    <!--<tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            &lt;!&ndash; propagation配置spring事务传播方式 &ndash;&gt;
+            &lt;!&ndash; 写操作 &ndash;&gt;
+            <tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+
+            &lt;!&ndash;由于默认propagation值为REQUIRED，read-only默认值为true，所以可省略&ndash;&gt;
+            <tx:method name="save*" rollback-for="java.lang.Exception"/>
+
+            &lt;!&ndash; 读操作 &ndash;&gt;
+            <tx:method name="find*" propagation="SUPPORTS"/>
+        </tx:attributes>
+    </tx:advice>-->
+
+    <!-- aop定义 -->
+    <!--<aop:config>
+        &lt;!&ndash; 定义切入点，切点 &ndash;&gt;
+        <aop:pointcut expression="execution(* org.snow1k.service.impl.*.*(..))" id="pc"/>
+
+        &lt;!&ndash; 定义事务通知 &ndash;&gt;
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pc"/>
+    </aop:config>-->
+
+</beans>

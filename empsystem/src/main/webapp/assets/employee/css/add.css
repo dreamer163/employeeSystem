@@ -1,0 +1,88 @@
+@charset "utf-8";
+
+.container {
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.container>div {
+	margin-top: 30px;
+}
+
+input[type=text] {
+	outline-style: none;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	padding: 13px 14px;
+	width: 400px;
+	font-size: 14px;
+	font-weight: 700;
+	font-family: "Microsoft soft";
+}
+
+input:focus {
+	border-color: #66afe9;
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
+}
+
+label {
+	width: 100px;
+	font-size: 14px;
+	font-weight: 700;
+	font-family: "Microsoft soft";
+	text-align: center;
+	display: inline-block;
+}
+
+h2{
+	font-size: 14px;
+	font-weight: 700;
+	font-family: "Microsoft soft";
+	text-align: center;
+	display: inline-block;
+}
+
+.fl {
+	float: left;
+}
+
+.clear::after {
+	content: "";
+	display: block;
+	clear: both;
+	width: 0;
+}
+
+input[type=radio] {
+	width: 20px;
+	height: 20px;
+	margin-left: 20px;
+}
+
+.required {
+	color: red;
+}
+
+button {
+    padding: 10px 30px;
+    margin-right: 30px;
+    outline: none;
+    border: none;
+    color: navajowhite;
+    background-color:  rgba(0, 0, 0, 0.8);
+    font-size: 15px;
+    cursor: pointer;
+}
+h1{
+	padding: 10px 30px;
+	margin-right: 30px;
+	outline: none;
+	border: none;
+	color: navajowhite;
+	background-color:  rgba(0, 0, 0, 0.8);
+	font-size: 15px;
+	text-align: center;
+}

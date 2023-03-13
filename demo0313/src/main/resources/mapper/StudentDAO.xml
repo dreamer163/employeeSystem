@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.situ.demo1.dao.StudentDAO">
+    <!--自定义一个映射-->
+    <resultMap id="StudentMap" type="Student">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="pinyin" property="py"/>
+        <result column="sex" property="sex" />
+        <result column="birthday" property="birthday" />
+        <result column="phone" property="phone"/>
+
+        <!--创建一个一对一关联查询-->
+        <association property="classEntity"
+                     column="class_id" select="com.situ.demo1.dao.ClassEntityDAO.findById"/>
+    </resultMap>
+
+    <!--动态sql-->
+    <!--配置接口中的方法实现-->
+    <select id="findAll" resultMap="StudentMap">
+        select id,
+               `name`,
+               pinyin,
+               sex,
+               birthday,
+               phone,
+               class_id
+        from t_student
+        limit #{pageNo}, #{pageSize}
+    </select>
+
+
+    <select id="findByClassId" resultMap="StudentMap">
+        select id,
+               `name`,
+               pinyin,
+               sex,
+               birthday,
+               phone,
+               class_id
+        from t_student where class_id = #{id}
+    </select>
+
+    <select id="findCount" resultType="java.lang.Long">
+        select count(0)
+        from t_human
+        <where>
+            <if test="hsc.name != null and hsc.name != ''">
+                and `name` like '%${hsc.name}%'
+            </if>
+            <if test="hsc.id != null">
+                and id = #{hsc.id}
+            </if>
+            <if test="hsc.sex!=null and hsc.sex!=''">
+                and sex = #{hsc.sex}
+            </if>
+        </where>
+    </select>
+
+    <!--删除-->
+    <delete id="deleteByIds">
+        delete from t_human where id in
+        <foreach collection="ids" open="(" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--根据编号查询唯一用户-->
+    <!--<select id="findById" parameterType="java.lang.Integer" resultType="User">
+        select id, username, password
+        from t_security_user
+        where id = #{id,jdbcType=INTEGER}
+    </select>-->
+
+</mapper>
